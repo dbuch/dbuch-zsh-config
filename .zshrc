@@ -1,11 +1,14 @@
-fpath+=$HOME/.zfunc
-
-setopt vi
-setopt nobeep
-setopt
-
 autoload -Uz compinit && compinit
 autoload -Uz +X add-zle-hook-widget 2>/dev/null
+
+zmodload parameter
+zmodload complist
+zmodload deltochar
+zmodload mathfunc
+
+zmodload -ap zsh/mapfile mapfile
+zmodload -a  zsh/stat    zstat
+zmodload -a  zsh/zpty    zpty
 
 source $HOME/.zsh/custom_alias.zsh
 source $HOME/.cargo/env
@@ -15,37 +18,27 @@ source $HOME/.cargo/env
 #  
 
 #MODE_SYMBOL='❯'
-#
 
-#function at_host() {
-#  REPLY=${SSH_CONNECTION+@%m}
-#}
-#grml_theme_add_token at_host -f at_host '' ''
 
-#zstyle ':prompt:grml:left:setup' items rc user at_host path vcs
-
-#zstyle ':prompt:grml:*:items:user' pre '%B%85F'
-#zstyle ':prompt:grml:*:items:user' post '%b%f'
-
-#zstyle ':prompt:grml:*:items:path' pre ' %B%75F'
-#zstyle ':prompt:grml:*:items:path' post '%b%f'
-
-#zstyle ':prompt:grml:*:items:at_host' pre '%B%75F'
-#zstyle ':prompt:grml:*:items:at_host' post '%b%f'
-
-# The following lines were added by compinstall
-
-#zstyle ':completion:*' completer _expand _complete _ignored _correct _approximate
-#zstyle :compinstall filename '/home/dbuch/.zshrc'
+# ZSH Options
+setopt vi
+setopt append_history
+setopt extended_history
+setopt histignorealldups
+setopt histignorespace
+setopt auto_cd
+setopt extended_glob
+setopt longlistjobs
+setopt nobeep
+setopt notify
+setopt completeinword
+setopt pushd_ignore_dups
+setopt interactivecomments
+setopt noglobdots
+setopt noshwordsplit
+setopt unset
 
 alias sudo='sudo '
-
-# End of lines added by compinstall
-#
-# Lines configured by zsh-newuser-install
-
-# End of lines configured by zsh-newuser-install
-#
 
 # Ensure precmds are run after cd
 local redraw-prompt() {
@@ -65,6 +58,7 @@ bookmarks() {
     return 0
   fi
 
+# Maybe use 'builtin' keyword here for cd?
   cd `echo "$location" | sed "s|~|$HOME/|"`
   local ret=$?
   zle redraw-prompt
@@ -94,7 +88,7 @@ zsh_grep() {
 zle     -N   zsh_grep
 bindkey '^g' zsh_grep
 
-function! bookmark() {
+function bookmark() {
   local bm=`echo $PWD`
   if [[ -z $(grep -x "$bm" $HOME/.bookmarks 2>/dev/null) ]]; then
       echo $bm >> $HOME/.bookmarks
