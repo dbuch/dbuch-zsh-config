@@ -1,0 +1,3 @@
+[submodule "submodules/zsh-async"]
+	path = submodules/zsh-async
+	url = git@github.com:mafredri/zsh-async.git
