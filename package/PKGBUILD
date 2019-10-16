@@ -33,7 +33,7 @@ package() {
     ${pkgdir}/etc/zsh/zshrc
 
 	install -D -m644 submodules/zsh-async/async.zsh \
-    ${pkgdir}/usr/share/zsh/functions/async
+    ${pkgdir}/usr/share/zsh/functions/Async/async
 
   install -D -m644 dbuch-prompt.zsh \
     ${pkgdir}/usr/share/zsh/functions/Prompts/prompt_dbuch_setup
