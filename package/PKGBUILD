@@ -1,0 +1,32 @@
+# Maintainer: Daniel Buch Hansen (dbuch) <boogiewasthere@gmail.com>
+
+pkgname=dbuch-zsh-config
+pkgver=1
+pkgrel=1
+pkgdesc="dbuch zsh configuration"
+url="https://github.com/dbuch/"
+arch=(x86_64)
+license=(GNU General Public License v3.0)
+depends=(zsh exa bat)
+makedepends=(git)
+source=("git+https://github.com/dbuch/dbuch-zsh-config.git")
+sha256sums=('SKIP')
+
+prepare() {
+  cd $pkgname
+
+  git submodule init
+
+  git config --local submodule.subprojects/zsh-async.url "$srcdir/zsh-async"
+
+  git submodule update
+}
+
+package() {
+	cd ${srcdir}/${pkgdir}
+	install -D -m644 zshrc.skel ${pkgdir}/etc/skel/.zshrc
+	install -D -m644 zshrc ${pkgdir}/etc/zsh/zshrc
+	install -D -m644 submodules/zsh-async/async.zsh ${pkgdir}/usr/share/zsh/functions/async
+ }
+
+# vim:set sw=2 et:
