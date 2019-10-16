@@ -1,4 +1,5 @@
 autoload -Uz compinit && compinit
+autoload -U promptinit && promptinit
 autoload -Uz +X add-zle-hook-widget 2>/dev/null
 
 zmodload zsh/parameter
