@@ -23,10 +23,19 @@ prepare() {
 }
 
 package() {
-	cd ${srcdir}/${pkgdir}
-	install -D -m644 zshrc.skel ${pkgdir}/etc/skel/.zshrc
-	install -D -m644 zshrc ${pkgdir}/etc/zsh/zshrc
-	install -D -m644 submodules/zsh-async/async.zsh ${pkgdir}/usr/share/zsh/functions/async
+	cd ${srcdir}/${pkgname}
+
+	install -D -m644 zshrc.skel \
+    ${pkgdir}/etc/skel/zshrc
+
+	install -D -m644 zshrc \
+    ${pkgdir}/etc/zsh/zshrc
+
+	install -D -m644 submodules/zsh-async/async.zsh \
+    ${pkgdir}/usr/share/zsh/functions/async
+
+  install -D -m644 dbuch-prompt.zsh \
+    ${pkgdir}/usr/share/zsh/functions/Prompts/prompt_dbuch_setup"
  }
 
 # vim:set sw=2 et:
