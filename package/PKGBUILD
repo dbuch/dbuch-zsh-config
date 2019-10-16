@@ -35,7 +35,7 @@ package() {
     ${pkgdir}/usr/share/zsh/functions/async
 
   install -D -m644 dbuch-prompt.zsh \
-    ${pkgdir}/usr/share/zsh/functions/Prompts/prompt_dbuch_setup"
- }
+    ${pkgdir}/usr/share/zsh/functions/Prompts/prompt_dbuch_setup
+}
 
 # vim:set sw=2 et:
