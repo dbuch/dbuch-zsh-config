@@ -10,6 +10,7 @@ license=(GNU General Public License v3.0)
 depends=(zsh exa bat)
 makedepends=(git)
 source=("git+https://github.com/dbuch/dbuch-zsh-config.git")
+conflicts=('grml-zsh-config')
 sha256sums=('SKIP')
 
 prepare() {
