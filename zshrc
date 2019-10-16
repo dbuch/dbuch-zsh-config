@@ -1,10 +1,10 @@
 autoload -Uz compinit && compinit
 autoload -Uz +X add-zle-hook-widget 2>/dev/null
 
-zmodload parameter
-zmodload complist
-zmodload deltochar
-zmodload mathfunc
+zmodload zsh/parameter
+zmodload zsh/complist
+zmodload zsh/deltochar
+zmodload zsh/mathfunc
 
 zmodload -ap zsh/mapfile mapfile
 zmodload -a  zsh/stat    zstat
@@ -18,7 +18,8 @@ source $HOME/.cargo/env
 #  
 
 #MODE_SYMBOL='❯'
-
+#
+prompt dbuch
 
 # ZSH Options
 setopt vi
