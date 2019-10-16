@@ -2,6 +2,8 @@ autoload -Uz compinit && compinit
 autoload -U promptinit && promptinit
 autoload -Uz +X add-zle-hook-widget 2>/dev/null
 
+export FPATH=/usr/share/zsh/functions/Async/:$FPATH
+
 zmodload zsh/parameter
 zmodload zsh/complist
 zmodload zsh/deltochar
@@ -10,9 +12,6 @@ zmodload zsh/mathfunc
 zmodload -ap zsh/mapfile mapfile
 zmodload -a  zsh/stat    zstat
 zmodload -a  zsh/zpty    zpty
-
-source $HOME/.zsh/custom_alias.zsh
-source $HOME/.cargo/env
 
 #      
 #         
