@@ -70,7 +70,8 @@ zle -N redraw-prompt
 history-widget() {
   local selected num
   setopt localoptions noglobsubst noposixbuiltins pipefail 2> /dev/null
-  selected=( $(fc -rl 1 | sk --reverse --height='40%' -n2..,.. --tiebreak=index --query=${(qqq)LBUFFER} -m) )
+  selected=( $(fc -rl 1 |
+    SKIM_DEFAULT_OPTIONS="--reverse --height ${SKIM_TMUX_HEIGHT:-40%} $SKIM_DEFAULT_OPTIONS -n2..,.. --tiebreak=index $SKIM_CTRL_R_OPTS --query=${(qqq)LBUFFER} -m" sk) )
   local ret=$?
   if [ -n "$selected" ]; then
     num=$selected[1]
@@ -78,7 +79,7 @@ history-widget() {
       zle vi-fetch-history -n $num
     fi
   fi
-  redraw-prompt
+  zle reset-prompt
   return $ret
 }
 zle     -N   history-widget
