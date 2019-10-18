@@ -75,7 +75,7 @@ setopt correct
 typeset -ga ls_options
 typeset -ga grep_options
 
-ls_options+=( --color=auto -X )
+ls_options+=( --color=auto --group-directories-first -v )
 grep_options+=( --color=auto )
 
 #############################
