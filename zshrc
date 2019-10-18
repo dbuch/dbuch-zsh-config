@@ -4,7 +4,7 @@
 
 export FPATH=/usr/share/zsh/functions/Async:$FPATH
 export PAGER=${PAGER:-less}
-export EDITOR=vim
+export EDITOR=${PAGER:-vi}
 export LESS_TERMCAP_mb=$'\E[01;31m'
 export LESS_TERMCAP_md=$'\E[01;31m'
 export LESS_TERMCAP_me=$'\E[0m'
@@ -19,10 +19,10 @@ export COLORTERM="yes"
 #############################
 
 autoload -Uz compinit && compinit
+autoload -Uz add-zle-hook-widget
+autoload -Uz edit-command-line
 autoload -U promptinit && promptinit
 autoload -U async && async
-autoload -Uz +X add-zle-hook-widget 2>/dev/null
-autoload -Uz edit-command-line
 
 #############################
 # ZSH Modules
@@ -88,7 +88,7 @@ alias la="command ls -la ${ls_options:+${ls_options[*]}}"
 alias ll="command ls -l ${ls_options:+${ls_options[*]}}"
 alias lh="command ls -hAl ${ls_options:+${ls_options[*]}}"
 alias l="command ls -l ${ls_options:+${ls_options[*]}}"
-alias grep="command grep ${grep_options:+${grep_options[*]}}"
+alias grep="command rg ${grep_options:+${grep_options[*]}}"
 
 #############################
 # Functions
@@ -102,7 +102,6 @@ local redraw-prompt() {
   done
   zle reset-prompt
 }
-zle -N redraw-prompt
 
 function skim-history() {
   local selected num
@@ -119,9 +118,8 @@ function skim-history() {
   zle reset-prompt
   return $ret
 }
-zle -N skim-history
 
-function bookmarks() {
+function skim-bookmarks() {
   setopt localoptions pipefail 2> /dev/null
   local location=$(cat "$BOOKMARKFILE" | sort | sk --reverse --preview 'exa -a --group-directories-first --oneline --git --color=always $(echo {} | sed "s|~|$HOME/|")')
   if [[ -z $location ]]; then
@@ -134,9 +132,8 @@ function bookmarks() {
   zle redraw-prompt
   return $ret
 }
-zle -N bookmarks
 
-function zsh_grep() {
+function skim_grep() {
   local res="$(sk --reverse --ansi -i --height="40%" -c 'rg --color=always --line-number "{}"')"
   if [[ -z $res ]]; then
     zle redisplay
@@ -153,7 +150,6 @@ function zsh_grep() {
 
   return $ret
 }
-zle -N zsh_grep
 
 function cl () {
     emulate -L zsh
@@ -182,6 +178,15 @@ function bookmark() {
   fi
 }
 
+#############################
+# Zsh Widgets
+#############################
+
+zle -N skim_bookmarks
+zle -N redraw-prompt
+zle -N skim-grep
+zle -N skim-history
+zle -N edit-command-line
 
 #############################
 # Keybindings
@@ -194,10 +199,10 @@ bindkey -M vicmd 'k' down-line-or-history
 bindkey -M vicmd 'v' edit-command-line
 
 bindkey -M vicmd '^g' zsh_grep
-bindkey '^g' zsh_grep
+bindkey '^g' skim-grep
 
 bindkey -M vicmd '^b' bookmarks
-bindkey '^b' bookmarks
+bindkey '^b' skim-bookmarks
 
 bindkey -M vicmd '^r' skim-history
 bindkey '^r' skim-history
