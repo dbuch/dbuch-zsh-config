@@ -183,7 +183,7 @@ function bookmark() {
 # Zsh Widgets
 #############################
 
-zle -N skim_bookmarks
+zle -N skim-bookmarks
 zle -N redraw-prompt
 zle -N skim-grep
 zle -N skim-history
