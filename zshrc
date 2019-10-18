@@ -134,7 +134,7 @@ function skim-bookmarks() {
   return $ret
 }
 
-function skim_grep() {
+function skim-grep() {
   local res="$(sk --reverse --ansi -i --height="40%" -c 'rg --color=always --line-number "{}"')"
   if [[ -z $res ]]; then
     zle redisplay
@@ -183,11 +183,11 @@ function bookmark() {
 # Zsh Widgets
 #############################
 
-zle -N skim-bookmarks
 zle -N redraw-prompt
+zle -N edit-command-line
+zle -N skim-bookmarks
 zle -N skim-grep
 zle -N skim-history
-zle -N edit-command-line
 
 #############################
 # Keybindings
