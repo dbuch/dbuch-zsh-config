@@ -16,6 +16,9 @@ export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[01;32m'
 export COLORTERM="yes"
 export KEYTIMEOUT=1
+export HISTSIZE=1000
+export SAVEHIST=1000
+export HISTFILE=$HOME/.zsh_history
 
 #############################
 # Autoloads
