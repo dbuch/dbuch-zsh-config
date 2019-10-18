@@ -92,7 +92,7 @@ alias la="command ls -la ${ls_options:+${ls_options[*]}}"
 alias ll="command ls -l ${ls_options:+${ls_options[*]}}"
 alias lh="command ls -hAl ${ls_options:+${ls_options[*]}}"
 alias l="command ls -l ${ls_options:+${ls_options[*]}}"
-alias grep="command rg ${grep_options:+${grep_options[*]}}"
+alias grep="command grep ${grep_options:+${grep_options[*]}}"
 
 #############################
 # Functions
@@ -153,11 +153,6 @@ function skim-grep() {
   zle redraw-prompt
 
   return $ret
-}
-
-function cl () {
-    emulate -L zsh
-    cd $1 && ls -a
 }
 
 # smart cd function, allows switching to /etc when running 'cd /etc/fstab'
