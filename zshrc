@@ -2,7 +2,9 @@ autoload -Uz compinit && compinit
 autoload -U promptinit && promptinit
 autoload -Uz +X add-zle-hook-widget 2>/dev/null
 
-export FPATH=/usr/share/zsh/functions/Async/:$FPATH
+#############################
+# ZSH Modules
+#############################
 
 zmodload zsh/parameter
 zmodload zsh/complist
@@ -13,13 +15,16 @@ zmodload -ap zsh/mapfile mapfile
 zmodload -a  zsh/stat    zstat
 zmodload -a  zsh/zpty    zpty
 
-#      
-#         
-#  
+#############################
+# Prompt
+#############################
 
 prompt dbuch
 
+#############################
 # ZSH Options
+#############################
+
 setopt vi
 setopt append_history
 setopt extended_history
@@ -38,6 +43,11 @@ setopt interactivecomments
 setopt noglobdots
 setopt noshwordsplit
 setopt unset
+setopt correct
+
+#############################
+# Types
+#############################
 
 typeset -ga ls_options
 typeset -ga grep_options
@@ -45,10 +55,27 @@ typeset -ga grep_options
 ls_options+=( --color=auto --group-directories-first )
 grep_options+=( --color=auto )
 
-alias sudo='sudo '
+#############################
+# Exports
+#############################
 
-zstyle ':completion:*' completer _expand _complete _ignored _correct _approximate
-zstyle :compinstall filename '/home/dbuch/.zshrc'
+export FPATH=/usr/share/zsh/functions/Async/:$FPATH
+export PAGER=${PAGER:-less}
+export EDITOR=vim
+export LESS_TERMCAP_mb=$'\E[01;31m'
+export LESS_TERMCAP_md=$'\E[01;31m'
+export LESS_TERMCAP_me=$'\E[0m'
+export LESS_TERMCAP_se=$'\E[0m'
+export LESS_TERMCAP_so=$'\E[01;44;33m'
+export LESS_TERMCAP_ue=$'\E[0m'
+export LESS_TERMCAP_us=$'\E[01;32m'
+export COLORTERM="yes"
+
+#############################
+# Alias
+#############################
+
+alias sudo='sudo '
 
 alias ls="command ls ${ls_options:+${ls_options[*]}}"
 alias la="command ls -la ${ls_options:+${ls_options[*]}}"
@@ -56,6 +83,10 @@ alias ll="command ls -l ${ls_options:+${ls_options[*]}}"
 alias lh="command ls -hAl ${ls_options:+${ls_options[*]}}"
 alias l="command ls -l ${ls_options:+${ls_options[*]}}"
 alias grep="command grep ${grep_options:+${grep_options[*]}}"
+
+#############################
+# Functions
+#############################
 
 # Ensure precmds are run after cd
 local redraw-prompt() {
@@ -67,7 +98,7 @@ local redraw-prompt() {
 }
 zle -N redraw-prompt
 
-history-widget() {
+function history-widget() {
   local selected num
   setopt localoptions noglobsubst noposixbuiltins pipefail 2> /dev/null
   selected=( $(fc -rl 1 |
@@ -85,7 +116,7 @@ history-widget() {
 zle     -N   history-widget
 bindkey '^R' history-widget
 
-bookmarks() {
+function bookmarks() {
   setopt localoptions pipefail 2> /dev/null
   local location=$(cat "$BOOKMARKFILE" | sort | sk --reverse --preview 'exa -a --group-directories-first --oneline --git --color=always $(echo {} | sed "s|~|$HOME/|")')
   if [[ -z $location ]]; then
@@ -93,8 +124,7 @@ bookmarks() {
     return 0
   fi
 
-# Maybe use 'builtin' keyword here for cd?
-  cd `echo "$location" | sed "s|~|$HOME/|"`
+  cl `echo "$location" | sed "s|~|$HOME/|"`
   local ret=$?
   zle redraw-prompt
   return $ret
@@ -102,7 +132,7 @@ bookmarks() {
 zle     -N   bookmarks
 bindkey '^b' bookmarks
 
-zsh_grep() {
+function zsh_grep() {
   local res="$(sk --reverse --ansi -i --height="40%" -c 'rg --color=always --line-number "{}"')"
   if [[ -z $res ]]; then
     zle redisplay
@@ -123,6 +153,22 @@ zsh_grep() {
 zle     -N   zsh_grep
 bindkey '^g' zsh_grep
 
+function cl () {
+    emulate -L zsh
+    cd $1 && ls -a
+}
+
+# smart cd function, allows switching to /etc when running 'cd /etc/fstab'
+function cd () {
+    if (( ${#argv} == 1 )) && [[ -f ${1} ]]; then
+        [[ ! -e ${1:h} ]] && return 1
+        print "Correcting ${1} to ${1:h}"
+        builtin cd ${1:h}
+    else
+        builtin cd "$@"
+    fi
+}
+
 function bookmark() {
   local bm=`echo $PWD`
   if [[ -z $(grep -x "$bm" $HOME/.bookmarks 2>/dev/null) ]]; then
@@ -133,6 +179,10 @@ function bookmark() {
       return 1
   fi
 }
+
+#############################
+# Completion system
+#############################
 
 # allow one error for every three characters typed in approximate completer
 zstyle ':completion:*:approximate:'    max-errors 'reply=( $((($#PREFIX+$#SUFFIX)/3 )) numeric )'
@@ -172,13 +222,7 @@ zstyle ':completion:*'                 matcher-list 'm:{a-z}={A-Z}'
 zstyle ':completion:*:matches'         group 'yes'
 zstyle ':completion:*'                 group-name ''
 
-if [[ "$NOMENU" -eq 0 ]] ; then
-    # if there are more than 5 options allow selecting from a menu
-    zstyle ':completion:*'               menu select=5
-else
-    # don't use any menus at all
-    setopt no_auto_menu
-fi
+zstyle ':completion:*'                 menu select=5
 
 zstyle ':completion:*:messages'        format '%d'
 zstyle ':completion:*:options'         auto-description '%d'
@@ -195,9 +239,6 @@ zstyle ':completion:*:*:-subscript-:*' tag-order indexes parameters
 # provide verbose completion information
 zstyle ':completion:*'                 verbose true
 
-# recent (as of Dec 2007) zsh versions are able to provide descriptions
-# for commands (read: 1st word in the line) that it will list for the user
-# to choose from. The following disables that, because it's not exactly fast.
 zstyle ':completion:*:-command-:*:'    verbose false
 
 # set format for warnings
@@ -214,18 +255,18 @@ zstyle ':completion::(^approximate*):*:functions' ignored-patterns '_*'
 zstyle ':completion:*:processes-names' command 'ps c -u ${USER} -o command | uniq'
 
 # complete manual by their section
-zstyle ':completion:*:manuals'    separate-sections true
-zstyle ':completion:*:manuals.*'  insert-sections   true
-zstyle ':completion:*:man:*'      menu yes select
+zstyle ':completion:*:manuals'         separate-sections true
+zstyle ':completion:*:manuals.*'       insert-sections   true
+zstyle ':completion:*:man:*'           menu yes select
 
 # Search path for sudo completion
-zstyle ':completion:*:sudo:*' command-path /usr/local/sbin \
-                                           /usr/local/bin  \
-                                           /usr/sbin       \
-                                           /usr/bin        \
-                                           /sbin           \
-                                           /bin            \
-                                           /usr/X11R6/bin
+zstyle ':completion:*:sudo:*'          command-path /usr/local/sbin \
+                                                    /usr/local/bin  \
+                                                    /usr/sbin       \
+                                                    /usr/bin        \
+                                                    /sbin           \
+                                                    /bin            \
+                                                    /usr/X11R6/bin
 
 # provide .. as a completion
 zstyle ':completion:*' special-dirs ..
@@ -236,32 +277,21 @@ function _force_rehash () {
     return 1
 }
 
-## correction
-# some people don't like the automatic correction - so run 'NOCOR=1 zsh' to deactivate it
-if [[ "$NOCOR" -gt 0 ]] ; then
-    zstyle ':completion:*' completer _oldlist _expand _force_rehash _complete _files _ignored
-    setopt nocorrect
-else
-    # try to be smart about when to use what completer...
-    setopt correct
-    zstyle -e ':completion:*' completer '
-        if [[ $_last_try != "$HISTNO$BUFFER$CURSOR" ]] ; then
-            _last_try="$HISTNO$BUFFER$CURSOR"
-            reply=(_complete _match _ignored _prefix _files)
+zstyle -e ':completion:*' completer '
+    if [[ $_last_try != "$HISTNO$BUFFER$CURSOR" ]] ; then
+        _last_try="$HISTNO$BUFFER$CURSOR"
+        reply=(_complete _match _ignored _prefix _files)
+    else
+        if [[ $words[1] == (rm|mv) ]] ; then
+            reply=(_complete _files)
         else
-            if [[ $words[1] == (rm|mv) ]] ; then
-                reply=(_complete _files)
-            else
-                reply=(_oldlist _expand _force_rehash _complete _ignored _correct _approximate _files)
-            fi
-        fi'
-fi
+            reply=(_oldlist _expand _force_rehash _complete _ignored _correct _approximate _files)
+        fi
+    fi'
 
 # command for process lists, the local web server details and host completion
 zstyle ':completion:*:urls' local 'www' '/var/www/' 'public_html'
 
-# Some functions, like _apt and _dpkg, are very slow. We can use a cache in
-# order to speed things up
 COMP_CACHE_DIR=${COMP_CACHE_DIR:-${ZDOTDIR:-$HOME}/.cache}
 if [[ ! -d ${COMP_CACHE_DIR} ]]; then
     command mkdir -p "${COMP_CACHE_DIR}"
@@ -288,6 +318,3 @@ for compcom in cp deborphan df feh fetchipac gpasswd head hnb ipacsum mv \
                pal stow uname ; do
     [[ -z ${_comps[$compcom]} ]] && compdef _gnu_generic ${compcom}
 done; unset compcom
-
-# see upgrade function in this file
-compdef _hosts upgrade
