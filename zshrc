@@ -22,6 +22,7 @@ autoload -Uz compinit && compinit
 autoload -U promptinit && promptinit
 autoload -U async && async
 autoload -Uz +X add-zle-hook-widget 2>/dev/null
+autoload -Uz edit-command-line
 
 #############################
 # ZSH Modules
@@ -103,7 +104,7 @@ local redraw-prompt() {
 }
 zle -N redraw-prompt
 
-function history-widget() {
+function skim-history() {
   local selected num
   setopt localoptions noglobsubst noposixbuiltins pipefail 2> /dev/null
   selected=( $(fc -rl 1 |
@@ -118,8 +119,7 @@ function history-widget() {
   zle reset-prompt
   return $ret
 }
-zle     -N   history-widget
-bindkey '^R' history-widget
+zle -N skim-history
 
 function bookmarks() {
   setopt localoptions pipefail 2> /dev/null
@@ -134,8 +134,7 @@ function bookmarks() {
   zle redraw-prompt
   return $ret
 }
-zle     -N   bookmarks
-bindkey '^b' bookmarks
+zle -N bookmarks
 
 function zsh_grep() {
   local res="$(sk --reverse --ansi -i --height="40%" -c 'rg --color=always --line-number "{}"')"
@@ -154,9 +153,7 @@ function zsh_grep() {
 
   return $ret
 }
-
-zle     -N   zsh_grep
-bindkey '^g' zsh_grep
+zle -N zsh_grep
 
 function cl () {
     emulate -L zsh
@@ -184,6 +181,24 @@ function bookmark() {
       return 1
   fi
 }
+
+
+#############################
+# Keybindings
+#############################
+
+bindkey -M vicmd 'j' up-line-or-history
+bindkey -M vicmd 'k' down-line-or-history
+bindkey -M vicmd 'v' edit-command-line
+
+bindkey -M vicmd '^g' zsh_grep
+bindkey '^g' zsh_grep
+
+bindkey -M vicmd '^b' bookmarks
+bindkey '^b' bookmarks
+
+bindkey -M vicmd '^r' skim-history
+bindkey '^r' skim-history
 
 #############################
 # Completion system
