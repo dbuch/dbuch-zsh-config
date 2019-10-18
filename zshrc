@@ -187,6 +187,8 @@ function bookmark() {
 # Keybindings
 #############################
 
+bindkey -v
+
 bindkey -M vicmd 'j' up-line-or-history
 bindkey -M vicmd 'k' down-line-or-history
 bindkey -M vicmd 'v' edit-command-line
