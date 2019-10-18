@@ -4,7 +4,9 @@
 
 export FPATH=/usr/share/zsh/functions/Async:$FPATH
 export PAGER=${PAGER:-less}
-export EDITOR=${PAGER:-vi}
+export SYSTEMD_EDITOR=${SYSTEMD_EDITOR:-vim}
+export EDITOR=${EDITOR:-vim}
+export VIRTUAL=${VIRTUAL:-vim}
 export LESS_TERMCAP_mb=$'\E[01;31m'
 export LESS_TERMCAP_md=$'\E[01;31m'
 export LESS_TERMCAP_me=$'\E[0m'
@@ -19,11 +21,12 @@ export KEYTIMEOUT=1
 # Autoloads
 #############################
 
-autoload -Uz compinit && compinit
+autoload -Uz compinit   && compinit
+autoload -U  promptinit && promptinit
+autoload -U  async      && async
+
 autoload -Uz add-zle-hook-widget
 autoload -Uz edit-command-line
-autoload -U promptinit && promptinit
-autoload -U async && async
 
 #############################
 # ZSH Modules
