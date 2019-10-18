@@ -199,7 +199,7 @@ bindkey -M vicmd 'j' up-line-or-history
 bindkey -M vicmd 'k' down-line-or-history
 bindkey -M vicmd '^v' edit-command-line
 
-bindkey -M vicmd '^g' zsh_grep
+bindkey -M vicmd '^g' skim-grep
 bindkey '^g' skim-grep
 
 bindkey -M vicmd '^b' bookmarks
