@@ -538,7 +538,7 @@ prompt_dbuch_prompt_render() {
   local surrounded_end="%F{$prompt_dbuch_colors[surrounded]}]%f"
   [[ -n ${prompt_dbuch_git_last_dirty_check_timestamp+x} ]] && git_color=$prompt_dbuch_colors[git:branch:cached]
 
-  # Initialize the preprompt array.
+  # Initialize the prompt arrays.
   local -a prompt_tokens
   local -a rprompt_tokens
 
@@ -546,7 +546,7 @@ prompt_dbuch_prompt_render() {
   prompt_tokens+=('$prompt_dbuch_state[hostname]')
 
   # Set the path.
-  prompt_tokens+=('%F{${prompt_dbuch_colors[path]}}%(4~|%-1~/…/%2~/|%~/%f)')
+  prompt_tokens+=('%F{${prompt_dbuch_colors[path]}}%(4~|%-1~/…/%2~/|%~/)%f')
 
   # Add Git branch and dirty status info.
   typeset -gA prompt_dbuch_vcs_info
