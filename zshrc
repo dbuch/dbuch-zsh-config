@@ -202,7 +202,7 @@ bindkey -M vicmd '^v' edit-command-line
 bindkey -M vicmd '^g' skim-grep
 bindkey '^g' skim-grep
 
-bindkey -M vicmd '^b' bookmarks
+bindkey -M vicmd '^b' skim-bookmarks
 bindkey '^b' skim-bookmarks
 
 bindkey -M vicmd '^r' skim-history
@@ -293,8 +293,7 @@ zstyle ':completion:*:sudo:*'          command-path /usr/local/sbin \
                                                     /usr/sbin       \
                                                     /usr/bin        \
                                                     /sbin           \
-                                                    /bin            \
-                                                    /usr/X11R6/bin
+                                                    /bin
 
 # provide .. as a completion
 zstyle ':completion:*' special-dirs ..
@@ -342,7 +341,7 @@ zstyle ':completion:*:hosts' hosts $hosts
 
 # use generic completion system for programs not yet defined; (_gnu_generic works
 # with commands that provide a --help option with "standard" gnu-like output.)
-for compcom in cp deborphan df feh fetchipac gpasswd head hnb ipacsum mv \
+for compcom in cp df gpasswd head mv \
                pal stow uname ; do
     [[ -z ${_comps[$compcom]} ]] && compdef _gnu_generic ${compcom}
 done; unset compcom
