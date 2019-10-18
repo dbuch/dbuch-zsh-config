@@ -13,6 +13,7 @@ export LESS_TERMCAP_so=$'\E[01;44;33m'
 export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[01;32m'
 export COLORTERM="yes"
+export KEYTIMEOUT=1
 
 #############################
 # Autoloads
@@ -196,7 +197,7 @@ bindkey -v
 
 bindkey -M vicmd 'j' up-line-or-history
 bindkey -M vicmd 'k' down-line-or-history
-bindkey -M vicmd 'v' edit-command-line
+bindkey -M vicmd '^v' edit-command-line
 
 bindkey -M vicmd '^g' zsh_grep
 bindkey '^g' skim-grep
