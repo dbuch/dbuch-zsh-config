@@ -26,7 +26,6 @@ export HISTFILE=$HOME/.zsh_history
 
 autoload -Uz compinit   && compinit
 autoload -U  promptinit && promptinit
-autoload -U  async      && async
 
 autoload -Uz add-zle-hook-widget
 autoload -Uz edit-command-line

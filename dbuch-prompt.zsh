@@ -19,7 +19,7 @@
 # \e[2K => clear everything on the current line
 #
 
-autoload -U async && async_init
+autoload -U async && async
 
 # Turns seconds into human readable time.
 # 165392 => 1d 21h 56m 32s
