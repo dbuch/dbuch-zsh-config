@@ -1,8 +1,3 @@
-# dbuch
-# by Sindre Sorhus
-# https://github.com/sindresorhus/dbuch
-# MIT License
-
 # For my own and others sanity
 # git:
 # %b => current branch
@@ -256,6 +251,16 @@ prompt_dbuch_async_git_arrows() {
   command git rev-list --left-right --count HEAD...@'{u}'
 }
 
+prompt_dbuch_async_renice() {
+  setopt localoptions noshwordsplit
+  if command -v renice >/dev/null; then
+    command renice +15 -p $$
+  fi
+  if command -v ionice >/dev/null; then
+    command ionice -c 3 -p $$
+  fi
+}
+
 prompt_dbuch_async_tasks() {
   setopt localoptions noshwordsplit
 
@@ -264,6 +269,7 @@ prompt_dbuch_async_tasks() {
     async_start_worker "prompt_dbuch" -u -n
       async_register_callback "prompt_dbuch" prompt_dbuch_async_callback
       typeset -g prompt_dbuch_async_init=1
+      async_job "prompt_dbuch" prompt_dbuch_async_renice
     }
 
   # Update the current working directory of the async worker.
@@ -427,6 +433,8 @@ prompt_dbuch_async_callback() {
           fi
           ;;
       esac
+      ;;
+    prompt_dbuch_async_renice)
       ;;
   esac
 
