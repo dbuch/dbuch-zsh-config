@@ -24,7 +24,7 @@ export HISTFILE=$HOME/.zsh_history
 # Autoloads
 #############################
 
-autoload -Uz compinit   && compinit
+autoload -Uz compinit   && compinit -i
 autoload -U  promptinit && promptinit
 
 autoload -Uz add-zle-hook-widget
@@ -195,18 +195,29 @@ zle -N skim-history
 
 bindkey -v
 
-bindkey -M vicmd 'j' up-line-or-history
+bindkey -M menuselect 'h' vi-backward-char
+bindkey -M menuselect 'k' vi-up-line-or-history
+bindkey -M menuselect 'l' vi-forward-char
+bindkey -M menuselect 'j' vi-down-line-or-history
+
+
+bindkey -M vicmd 'J' up-line-or-history
+bindkey -M viins '^J' down-line-or-history
+
 bindkey -M vicmd 'k' down-line-or-history
-bindkey -M vicmd '^v' edit-command-line
+bindkey -M viins '^K' up-line-or-history
+
+bindkey -M vicmd 'v' edit-command-line
+bindkey -M viins '^v' edit-command-line
 
 bindkey -M vicmd '^g' skim-grep
-bindkey '^g' skim-grep
+bindkey -M viins '^g' skim-grep
 
 bindkey -M vicmd '^b' skim-bookmarks
-bindkey '^b' skim-bookmarks
+bindkey -M viins '^b' skim-bookmarks
 
 bindkey -M vicmd '^r' skim-history
-bindkey '^r' skim-history
+bindkey -M viins '^r' skim-history
 
 #############################
 # Completion system
