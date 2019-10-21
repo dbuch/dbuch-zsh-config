@@ -134,7 +134,7 @@ function skim-bookmarks() {
     return 0
   fi
 
-  cl `echo "$location" | sed "s|~|$HOME/|"`
+  cd `echo "$location" | sed "s|~|$HOME/|"`
   local ret=$?
   zle redraw-prompt
   return $ret
