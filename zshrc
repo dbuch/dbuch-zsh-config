@@ -72,6 +72,7 @@ setopt noglobdots
 setopt noshwordsplit
 setopt unset
 setopt correct
+setopt NO_clobber
 
 #############################
 # Types
