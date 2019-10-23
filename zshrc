@@ -19,6 +19,7 @@ export KEYTIMEOUT=1
 export HISTSIZE=1000
 export SAVEHIST=1000
 export HISTFILE=$HOME/.zsh_history
+export SKIM_DEFAULT_OPTIONS="--bind 'ctrl-j:down,ctrl-k:up"
 
 #############################
 # Autoloads
@@ -201,6 +202,7 @@ bindkey -M menuselect 'k' vi-up-line-or-history
 bindkey -M menuselect 'l' vi-forward-char
 bindkey -M menuselect 'j' vi-down-line-or-history
 
+bindkey -M vicmd -r "^j"
 
 bindkey -M vicmd 'J' up-line-or-history
 bindkey -M viins '^J' down-line-or-history
