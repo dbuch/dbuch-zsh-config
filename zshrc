@@ -19,7 +19,7 @@ export KEYTIMEOUT=1
 export HISTSIZE=1000
 export SAVEHIST=1000
 export HISTFILE=$HOME/.zsh_history
-export SKIM_DEFAULT_OPTIONS="--bind alt-j:down,alt-k:up --reverse --height=40%"
+export SKIM_DEFAULT_OPTIONS="--bind=alt-j:down,alt-k:up --reverse --height=40%"
 
 #############################
 # Autoloads
@@ -128,7 +128,7 @@ function skim-history() {
 
 function skim-bookmarks() {
   setopt localoptions pipefail 2> /dev/null
-  local location=$(cat "$BOOKMARKFILE" | sort | sk $SKIM_DEFAULT_OPTIONS)
+  local location=$(cat "$BOOKMARKFILE" | sk $SKIM_DEFAULT_OPTIONS)
   if [[ -z $location ]]; then
     zle redisplay
     return 0
@@ -141,7 +141,7 @@ function skim-bookmarks() {
 }
 
 function skim-grep() {
-  local res=$(sk --reverse --ansi -i --height="40%" -c 'rg --color=always --line-number "{}"')
+  local res=$(sk $SKIM_DEFAULT_OPTIONS --ansi -i -c 'rg --color=always --line-number "{}"')
   if [[ -z $res ]]; then
     zle redisplay
     return 0
