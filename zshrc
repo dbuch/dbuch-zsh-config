@@ -19,7 +19,7 @@ export KEYTIMEOUT=1
 export HISTSIZE=1000
 export SAVEHIST=1000
 export HISTFILE=$HOME/.zsh_history
-export SKIM_DEFAULT_OPTIONS="--bind 'ctrl-j:down,ctrl-k:up"
+export SKIM_DEFAULT_OPTIONS="--reverse --height=%40 --bind alt-j:down,alt-k:up"
 
 #############################
 # Autoloads
@@ -114,8 +114,7 @@ local redraw-prompt() {
 function skim-history() {
   local selected num
   setopt localoptions noglobsubst noposixbuiltins pipefail 2> /dev/null
-  selected=( $(fc -rl 1 |
-    SKIM_DEFAULT_OPTIONS="--reverse --height ${SKIM_TMUX_HEIGHT:-40%} $SKIM_DEFAULT_OPTIONS -n2..,.. --tiebreak=index $SKIM_CTRL_R_OPTS --query=${(qqq)LBUFFER} -m" sk) )
+  selected=( $(fc -rl 1 | SKIM_DEFAULT_OPTIONS="--reverse --height ${SKIM_TMUX_HEIGHT:-40%} $SKIM_DEFAULT_OPTIONS -n2..,.. --tiebreak=index $SKIM_CTRL_R_OPTS --query=${(qqq)LBUFFER} -m" sk) )
   local ret=$?
   if [ -n "$selected" ]; then
     num=$selected[1]
@@ -129,7 +128,7 @@ function skim-history() {
 
 function skim-bookmarks() {
   setopt localoptions pipefail 2> /dev/null
-  local location=$(cat "$BOOKMARKFILE" | sort | sk --reverse --preview 'exa -a --group-directories-first --oneline --git --color=always $(echo {} | sed "s|~|$HOME/|")')
+  local location=$(cat "$BOOKMARKFILE" | sort | sk $SKIM_DEFAULT_OPTIONS)
   if [[ -z $location ]]; then
     zle redisplay
     return 0
@@ -142,7 +141,7 @@ function skim-bookmarks() {
 }
 
 function skim-grep() {
-  local res="$(sk --reverse --ansi -i --height="40%" -c 'rg --color=always --line-number "{}"')"
+  local res=$(sk --reverse --ansi -i --height="40%" -c 'rg --color=always --line-number "{}"')
   if [[ -z $res ]]; then
     zle redisplay
     return 0
@@ -205,22 +204,22 @@ bindkey -M menuselect 'j' vi-down-line-or-history
 bindkey -M vicmd -r "^j"
 
 bindkey -M vicmd 'J' up-line-or-history
-bindkey -M viins '^J' down-line-or-history
+bindkey -M viins '^[J' down-line-or-history
 
 bindkey -M vicmd 'k' down-line-or-history
-bindkey -M viins '^K' up-line-or-history
+bindkey -M viins '^[K' up-line-or-history
 
 bindkey -M vicmd 'v' edit-command-line
-bindkey -M viins '^v' edit-command-line
+bindkey -M viins '^[v' edit-command-line
 
-bindkey -M vicmd '^g' skim-grep
-bindkey -M viins '^g' skim-grep
+bindkey -M vicmd '^[g' skim-grep
+bindkey -M viins '^[g' skim-grep
 
-bindkey -M vicmd '^b' skim-bookmarks
-bindkey -M viins '^b' skim-bookmarks
+bindkey -M vicmd '^[b' skim-bookmarks
+bindkey -M viins '^[b' skim-bookmarks
 
-bindkey -M vicmd '^r' skim-history
-bindkey -M viins '^r' skim-history
+bindkey -M vicmd '^[r' skim-history
+bindkey -M viins '^[r' skim-history
 
 #############################
 # Completion system
