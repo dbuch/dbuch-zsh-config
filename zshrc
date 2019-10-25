@@ -19,7 +19,7 @@ export KEYTIMEOUT=1
 export HISTSIZE=1000
 export SAVEHIST=1000
 export HISTFILE=$HOME/.zsh_history
-export SKIM_DEFAULT_OPTIONS="--reverse --height=%40 --bind alt-j:down,alt-k:up"
+export SKIM_DEFAULT_OPTIONS="--reverse --height=40% --bind alt-j:down,alt-k:up"
 
 #############################
 # Autoloads
