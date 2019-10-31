@@ -462,12 +462,12 @@ prompt_dbuch_reset_prompt() {
 }
 
 prompt_dbuch_reset_prompt_symbol() {
-  prompt_dbuch_state[prompt]=${DBUCH_PROMPT_SYMBOL:- }
+  prompt_dbuch_state[prompt]=${DBUCH_PROMPT_SYMBOL:- }
 }
 
 prompt_dbuch_update_vim_prompt_widget() {
   setopt localoptions noshwordsplit
-  prompt_dbuch_state[prompt]=${${KEYMAP/vicmd/${DBUCH_PROMPT_VICMD_SYMBOL:- }}/(main|viins)/${DBUCH_PROMPT_SYMBOL:- }}
+  prompt_dbuch_state[prompt]=${${KEYMAP/vicmd/${DBUCH_PROMPT_VICMD_SYMBOL:- }}/(main|viins)/${DBUCH_PROMPT_SYMBOL:- }}
 
   prompt_dbuch_reset_prompt
 }
