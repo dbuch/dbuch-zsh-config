@@ -203,11 +203,11 @@ bindkey -M menuselect 'j' vi-down-line-or-history
 
 bindkey -M vicmd -r "^j"
 
-bindkey -M vicmd 'J' up-line-or-history
-bindkey -M viins '^[J' down-line-or-history
+bindkey -M vicmd 'J' vi-down-line-or-history
+bindkey -M viins '^[J' vi-down-line-or-history
 
-bindkey -M vicmd 'k' down-line-or-history
-bindkey -M viins '^[K' up-line-or-history
+bindkey -M vicmd 'k' vi-up-line-or-history
+bindkey -M viins '^[K' vi-up-line-or-history
 
 bindkey -M vicmd 'v' edit-command-line
 bindkey -M viins '^[v' edit-command-line
